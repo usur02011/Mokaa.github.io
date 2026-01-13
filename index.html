@@ -259,24 +259,28 @@
             <p>Fait avec ❤️ et beaucoup de café</p>
         </footer>
     </div>
-
     <script>
-        let isOpen = false;
+    let isOpen = false; // false = fermées, true = ouvertes
 
-        function toggleCommissionStatus() {
-            const statusBtn = document.getElementById('commissionStatus');
-            isOpen = !isOpen;
+    function toggleCommissionStatus() {
+        const statusBtn = document.getElementById('commissionStatus');
 
-            if (isOpen) {
-                statusBtn.className = 'status-toggle status-open';
-                statusBtn.textContent = '✅ COMMISSIONS OUVERTES';
-            } else {
-                statusBtn.className = 'status-toggle status-closed';
-                statusBtn.textContent = '❌ COMMISSIONS FERMÉES';
-            }
+        if (isOpen) {
+            statusBtn.className = 'status-toggle status-open';
+            statusBtn.textContent = '✅ COMMISSIONS OUVERTES';
+        } else {
+            statusBtn.className = 'status-toggle status-closed';
+            statusBtn.textContent = '❌ COMMISSIONS FERMÉES';
         }
-    </script>
+
+        isOpen = !isOpen;
+    }
+
+    // 👇 applique l’état FALSE au chargement
+    toggleCommissionStatus();
+</script>
 </body>
 
 </html>
+
 
