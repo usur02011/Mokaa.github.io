@@ -35,6 +35,43 @@
             z-index: 0;
         }
 
+        .coffee-rain {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .coffee {
+            position: absolute;
+            font-size: 20px;
+            opacity: 0.3;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                top: -10%;
+                transform: translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.3;
+            }
+            90% {
+                opacity: 0.3;
+            }
+            100% {
+                top: 110%;
+                transform: translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
         .header {
             text-align: center;
             padding: 80px 20px 60px;
@@ -287,6 +324,112 @@
             z-index: 1;
         }
 
+        .schedule {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .day-card {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.2) 0%, rgba(166, 124, 82, 0.15) 100%);
+            padding: 20px 15px;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(212, 165, 116, 0.3);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .day-card.active {
+            background: linear-gradient(135deg, rgba(155, 89, 182, 0.3) 0%, rgba(142, 68, 173, 0.25) 100%);
+            border-color: #9b59b6;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(155, 89, 182, 0.5);
+        }
+
+        .day-card.off {
+            opacity: 0.5;
+            background: linear-gradient(135deg, rgba(100, 100, 100, 0.2) 0%, rgba(80, 80, 80, 0.15) 100%);
+        }
+
+        .day-card h4 {
+            color: #d4a574;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+        }
+
+        .day-card.active h4 {
+            color: #9b59b6;
+        }
+
+        .day-card.off h4 {
+            color: #999;
+        }
+
+        .day-card p {
+            color: #f5e6d3;
+            font-size: 0.9em;
+        }
+
+        .twitch-widget {
+            margin-top: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            border: 3px solid rgba(212, 165, 116, 0.3);
+        }
+
+        .easter-egg-coffee {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            font-size: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 1000;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .easter-egg-coffee:hover {
+            transform: scale(1.2) rotate(15deg);
+        }
+
+        .easter-egg-coffee.clicked {
+            animation: explode 0.6s ease-out;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(2) rotate(180deg); opacity: 1; }
+            100% { transform: scale(0.5) rotate(360deg); opacity: 0; }
+        }
+
+        .coffee-explosion {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            font-size: 30px;
+            animation: explodeCoffee 1s ease-out forwards;
+        }
+
+        @keyframes explodeCoffee {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0.5);
+                opacity: 0;
+            }
+        }
+
         @media (max-width: 768px) {
             .header h1 {
                 font-size: 2.5em;
@@ -304,10 +447,21 @@
                 width: 100%;
                 justify-content: center;
             }
+
+            .schedule {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .easter-egg-coffee {
+                bottom: 20px;
+                right: 20px;
+                font-size: 40px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="coffee-rain" id="coffeeRain"></div>
     <div class="header">
         <h1>☕ Moka Café</h1>
         <p>VTuber • Artiste • Passionné</p>
@@ -329,6 +483,55 @@
                 <a href="https://discord.gg/S8ADhSjs" target="_blank" class="link-btn discord">
                     <span>💬</span> Discord
                 </a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📺 Twitch Live</h2>
+            <div class="twitch-widget">
+                <iframe
+                    src="https://player.twitch.tv/?channel=mokaa_cafe&parent=localhost&parent=127.0.0.1&parent=claude.ai&parent=claude.site&muted=false"
+                    height="400"
+                    width="100%"
+                    allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📅 Horaires de Stream</h2>
+            <p style="text-align: center; margin-bottom: 20px; color: #f5e6d3; font-size: 1.1em;">
+                Rendez-vous en soirée pour des streams chill ! ☕
+            </p>
+            <div class="schedule">
+                <div class="day-card active">
+                    <h4>Lundi</h4>
+                    <p>🌙 En soirée</p>
+                </div>
+                <div class="day-card active">
+                    <h4>Mardi</h4>
+                    <p>🌙 En soirée</p>
+                </div>
+                <div class="day-card active">
+                    <h4>Mercredi</h4>
+                    <p>🌙 En soirée</p>
+                </div>
+                <div class="day-card active">
+                    <h4>Jeudi</h4>
+                    <p>🌙 En soirée</p>
+                </div>
+                <div class="day-card active">
+                    <h4>Vendredi</h4>
+                    <p>🌙 En soirée</p>
+                </div>
+                <div class="day-card active">
+                    <h4>Samedi</h4>
+                    <p>🌙 En soirée</p>
+                </div>
+                <div class="day-card off">
+                    <h4>Dimanche</h4>
+                    <p>😴 Repos</p>
+                </div>
             </div>
         </div>
 
@@ -365,23 +568,76 @@
         <p>© 2026 Moka Café • Fait avec ☕ et 💜</p>
     </footer>
 
-    <script>
-        const gallery = document.getElementById('gallery');
-        const maxImages = 10;
-        let loadedImages = 0;
+    <div class="easter-egg-coffee" id="easterEgg" title="Clique-moi ! ☕">☕</div>
 
-        for (let i = 1; i <= maxImages; i++) {
-            const img = new Image();
-            img.src = `dessin${i}.jpg`;
+    <script>
+        // Easter Egg - Café explosif !
+        const easterEgg = document.getElementById('easterEgg');
+        let clickCount = 0;
+
+        easterEgg.addEventListener('click', function(e) {
+            clickCount++;
             
-            img.onload = function() {
-                const item = document.createElement('div');
-                item.className = 'gallery-item';
-                item.innerHTML = `<img src="dessin${i}.jpg" alt="Dessin ${i}">`;
-                gallery.appendChild(item);
-                loadedImages++;
-            };
-        }
-    </script>
-</body>
-</html>
+            // Animation d'explosion
+            this.classList.add('clicked');
+            
+            // Créer des cafés qui explosent
+            for (let i = 0; i < 12; i++) {
+                const coffee = document.createElement('div');
+                coffee.className = 'coffee-explosion';
+                coffee.textContent = '☕';
+                coffee.style.left = e.clientX + 'px';
+                coffee.style.top = e.clientY + 'px';
+                
+                const angle = (Math.PI * 2 * i) / 12;
+                const distance = 150 + Math.random() * 100;
+                coffee.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
+                coffee.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
+                
+                document.body.appendChild(coffee);
+                
+                setTimeout(() => coffee.remove(), 1000);
+            }
+            
+            // Messages aléatoires
+            const messages = [
+                "☕ Café bien chaud !",
+                "✨ Moka approuve !",
+                "🎮 Time to stream !",
+                "🎨 Inspiration +100 !",
+                "💜 Merci pour le café !",
+                "🌙 Parfait pour la soirée !",
+                "😊 Un café de plus, un dessin de plus !",
+                "🔥 C'est parti pour une session !",
+                "⭐ Tu as trouvé le secret !",
+                "🎵 *bruit de café qui coule*"
+            ];
+            
+            if (clickCount % 5 === 0) {
+                const message = messages[Math.floor(Math.random() * messages.length)];
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    background: linear-gradient(135deg, #d4a574 0%, #a67c52 100%);
+                    color: #1a1a2e;
+                    padding: 20px 40px;
+                    border-radius: 15px;
+                    font-size: 1.5em;
+                    font-weight: 600;
+                    z-index: 10000;
+                    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+                    animation: fadeInOut 2s ease-in-out;
+                `;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => notification.remove(), 2000);
+            }
+            
+            // Remettre le café après l'animation
+            setTimeout(() => {
+                this.classList.remove('clicked');
+ 
