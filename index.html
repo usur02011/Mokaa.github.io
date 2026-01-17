@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Moka Café - VTuber & Artiste</title>
+    <title>Moka Café - Portfolio</title>
     <style>
         * {
             margin: 0;
@@ -12,632 +12,546 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #2c1810 0%, #3d2517 50%, #2c1810 100%);
-            background-attachment: fixed;
-            color: #f5e6d3;
-            line-height: 1.6;
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d4b8 100%);
             overflow-x: hidden;
-            position: relative;
         }
 
-        body::before {
-            content: '';
+        /* LOADING SCREEN */
+        #loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(212, 165, 116, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 70%, rgba(166, 124, 82, 0.05) 0%, transparent 50%);
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d4b8 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+
+        #loading-screen.hidden {
+            opacity: 0;
             pointer-events: none;
-            z-index: 0;
         }
 
-        .coffee-rain {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .coffee {
-            position: absolute;
-            font-size: 20px;
-            opacity: 0.3;
-            animation: fall linear infinite;
-        }
-
-        @keyframes fall {
-            0% {
-                top: -10%;
-                transform: translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.3;
-            }
-            90% {
-                opacity: 0.3;
-            }
-            100% {
-                top: 110%;
-                transform: translateX(100px) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        .header {
-            text-align: center;
-            padding: 80px 20px 60px;
-            background: linear-gradient(135deg, #d4a574 0%, #b8936d 50%, #a67c52 100%);
+        .loader {
+            width: 100px;
+            height: 80px;
             position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: flex;
+            justify-items: center;
+            align-items: center;
         }
 
-        .header::before {
-            content: '☕';
+        .loader .cup {
             position: absolute;
-            font-size: 200px;
-            opacity: 0.15;
-            top: -40px;
-            right: 10%;
-            animation: float 6s ease-in-out infinite;
+            width: 25px;
+            height: 18px;
+            background-color: #fff;
+            border: 1px solid #2e2e2e;
+            z-index: 1;
+            border-radius: 2px 2px 10px 10px;
+            animation: expansion 6s infinite ease-in-out;
+            transform-origin: center;
         }
 
-        .header::after {
-            content: '☕';
+        .cup::after {
+            content: "";
             position: absolute;
-            font-size: 150px;
-            opacity: 0.1;
-            bottom: -30px;
-            left: 15%;
-            animation: float 8s ease-in-out infinite;
+            top: -2px;
+            width: calc(100% - 2px);
+            height: 2px;
+            background: #fed59fca;
+            border: 1px solid #2e2e2ebe;
+            border-radius: 50%;
+        }
+
+        .cup::before {
+            content: "";
+            position: absolute;
+            top: 15px;
+            width: calc(100% - 2px);
+            height: 4px;
+            background: #ffffff00;
+            border: 1px solid #2e2e2e;
+            border-top: none;
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .loader .cup .cup-handle {
+            position: absolute;
+            width: 5px;
+            height: 10px;
+            background-color: #fff;
+            border: 1px solid #2e2e2e;
+            right: -5px;
+            top: 2px;
+            border-radius: 2px 10px 20px 2px;
+        }
+
+        .loader .cup .smoke {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            width: 15px;
+            height: 25px;
+            background: rgba(107, 102, 102, 0.433);
+            border-radius: 50%;
+            transform: translateX(-50%);
+            animation: rise 6s infinite ease-in-out;
+            filter: blur(8px);
+        }
+
+        .loader .cup .smoke.one {
+            animation-delay: 0s;
+        }
+
+        .loader .cup .smoke.two {
             animation-delay: 1s;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
+        .loader .cup .smoke.three {
+            animation-delay: 2s;
         }
 
-        .header h1 {
-            font-size: 3.5em;
-            color: #2c1810;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        .loader .load {
+            position: absolute;
+            font-size: 10px;
+            opacity: 0.7;
+            top: 45%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: -1;
+        }
+
+        @keyframes expansion {
+            0% { width: 25px; transform: translateX(0); }
+            40% { width: 100%; transform: translateX(0); }
+            80% { width: 25px; transform: translateX(64px); }
+            90% { width: 100%; transform: translateX(0); }
+            100% { width: 25px; transform: translateX(0); }
+        }
+
+        @keyframes rise {
+            0% { transform: translate(-50%, 0) scale(0.4); opacity: 0; }
+            30% { opacity: 0.7; }
+            60% { opacity: 0.4; }
+            100% { transform: translate(-50%, -120px) scale(1); opacity: 0; }
+        }
+
+        /* COOKIE BANNER */
+        #cookie-banner {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 9998;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        #cookie-banner.hidden {
+            opacity: 0;
+            transform: translateX(-50%) translateY(100px);
+            pointer-events: none;
+        }
+
+        .cookie-card {
+            width: 90%;
+            max-width: 350px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: rgba(60,64,67,0.3) 0 1px 2px 0, rgba(60,64,67,0.15) 0 2px 6px 2px;
+            padding: 25px 25px 80px 25px;
+            position: relative;
+        }
+
+        .cookie-icon {
+            margin: -50px auto 20px auto;
+            width: 65px;
+            height: 46px;
+        }
+
+        .cookie-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #634647;
             margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
         }
 
-        .header p {
-            font-size: 1.3em;
-            color: #3d2517;
-            position: relative;
-            z-index: 1;
+        .cookie-text {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            text-align: justify;
         }
 
+        .cookie-text a {
+            color: #634647;
+            text-decoration: underline;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .cookie-text a:hover {
+            color: #EAB789;
+        }
+
+        .cookie-options {
+            margin-top: 15px;
+            color: #666;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .cookie-options:hover {
+            color: #634647;
+            text-decoration: underline;
+        }
+
+        .cookie-accept {
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+            background: #ddad81;
+            color: #634647;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cookie-accept:hover {
+            background: #634647;
+            color: #ddad81;
+        }
+
+        /* MAIN CONTENT */
+        #main-content {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        #main-content.visible {
+            opacity: 1;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #634647 0%, #845556 100%);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: "☕";
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.1;
+            left: 10%;
+            top: -20px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        header::after {
+            content: "☕";
+            position: absolute;
+            font-size: 100px;
+            opacity: 0.1;
+            right: 10%;
+            top: -20px;
+            animation: float 3s ease-in-out infinite 1.5s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            color: #f5e6d3;
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+        }
+
+        .subtitle {
+            color: #EAB789;
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        /* Navigation */
+        nav {
+            background: #9C6750;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav a {
+            color: #f5e6d3;
+            text-decoration: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        nav a:hover {
+            background: #634647;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Sections */
         .container {
             max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            position: relative;
-            z-index: 1;
+            margin: 40px auto;
+            padding: 0 20px;
         }
 
         .section {
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.15) 0%, rgba(166, 124, 82, 0.15) 100%);
-            backdrop-filter: blur(10px);
+            background: white;
+            padding: 30px;
+            margin-bottom: 30px;
             border-radius: 20px;
-            padding: 40px;
-            margin: 40px 0;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
-            border: 1px solid rgba(212, 165, 116, 0.2);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            border: 3px solid #EAB789;
             position: relative;
             overflow: hidden;
         }
 
         .section::before {
-            content: '';
+            content: "";
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, #d4a574, transparent);
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: #f5e6d3;
+            border-radius: 50%;
+            opacity: 0.3;
         }
 
         .section h2 {
-            color: #d4a574;
-            font-size: 2.2em;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #634647;
+            font-size: 2em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #EAB789;
+            padding-bottom: 10px;
         }
 
-        .section h2::before {
-            content: '';
-            width: 5px;
-            height: 40px;
-            background: linear-gradient(180deg, #d4a574 0%, #a67c52 100%);
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(212, 165, 116, 0.5);
-        }
-
-        .bio {
-            font-size: 1.15em;
+        /* About */
+        .about-content {
             line-height: 1.8;
-            color: #f5e6d3;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            color: #666;
+            font-size: 1.1em;
         }
 
-        .links {
+        /* Social Links */
+        .social-links {
             display: flex;
             gap: 20px;
-            flex-wrap: wrap;
             justify-content: center;
-            margin-top: 30px;
-        }
-
-        .link-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 15px 30px;
-            background: linear-gradient(135deg, #9b59b6 0%, #8e44ad 100%);
-            color: white;
-            text-decoration: none;
-            border-radius: 50px;
-            font-size: 1.1em;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4), 0 0 20px rgba(155, 89, 182, 0.2);
-        }
-
-        .link-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(155, 89, 182, 0.6), 0 0 30px rgba(155, 89, 182, 0.3);
-        }
-
-        .link-btn.discord {
-            background: linear-gradient(135deg, #5865F2 0%, #4752C4 100%);
-            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.4), 0 0 20px rgba(88, 101, 242, 0.2);
-        }
-
-        .link-btn.discord:hover {
-            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.6), 0 0 30px rgba(88, 101, 242, 0.3);
-        }
-
-        .skills {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
+            flex-wrap: wrap;
             margin-top: 20px;
         }
 
-        .skill-card {
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.2) 0%, rgba(166, 124, 82, 0.15) 100%);
-            padding: 25px;
-            border-radius: 15px;
-            border-left: 4px solid #d4a574;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        .social-btn {
+            background: linear-gradient(135deg, #845556 0%, #634647 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
 
-        .skill-card:hover {
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.3) 0%, rgba(166, 124, 82, 0.25) 100%);
-            transform: translateX(5px);
-            box-shadow: 0 6px 20px rgba(212, 165, 116, 0.4);
+        .social-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, #634647 0%, #845556 100%);
         }
 
-        .skill-card h3 {
-            color: #d4a574;
-            margin-bottom: 10px;
-            font-size: 1.3em;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .skill-card p {
-            color: #f5e6d3;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-
-        .gallery-item {
-            position: relative;
-            overflow: hidden;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.5), 0 0 0 3px rgba(212, 165, 116, 0.3);
-            transition: all 0.3s ease;
-            aspect-ratio: 1;
-        }
-
-        .gallery-item:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 30px rgba(212, 165, 116, 0.6), 0 0 0 3px rgba(212, 165, 116, 0.6);
-        }
-
-        .gallery-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
+        /* Commissions */
         .commission-status {
-            background: linear-gradient(135deg, rgba(166, 124, 82, 0.3) 0%, rgba(139, 69, 19, 0.3) 100%);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, #ffebcd 0%, #ffd7a3 100%);
+            padding: 20px;
             border-radius: 15px;
-            padding: 30px;
-            margin: 40px 0 20px;
             text-align: center;
-            border: 2px solid rgba(212, 165, 116, 0.4);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-            position: relative;
-            z-index: 1;
+            border: 3px dashed #9C6750;
+            margin-top: 20px;
         }
 
         .commission-status h3 {
-            color: #d4a574;
-            font-size: 1.8em;
+            color: #634647;
+            font-size: 1.5em;
             margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
         }
 
         .commission-status p {
-            color: #f5e6d3;
-            font-size: 1.2em;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            background: linear-gradient(135deg, #c0392b 0%, #e74c3c 100%);
-            border-radius: 25px;
-            font-weight: 600;
-            margin-top: 10px;
-            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px 20px;
-            color: #b8936d;
-            font-size: 0.95em;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            position: relative;
-            z-index: 1;
-        }
-
-        .schedule {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .day-card {
-            background: linear-gradient(135deg, rgba(212, 165, 116, 0.2) 0%, rgba(166, 124, 82, 0.15) 100%);
-            padding: 20px 15px;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(212, 165, 116, 0.3);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-        }
-
-        .day-card.active {
-            background: linear-gradient(135deg, rgba(155, 89, 182, 0.3) 0%, rgba(142, 68, 173, 0.25) 100%);
-            border-color: #9b59b6;
-            transform: scale(1.05);
-            box-shadow: 0 6px 20px rgba(155, 89, 182, 0.5);
-        }
-
-        .day-card.off {
-            opacity: 0.5;
-            background: linear-gradient(135deg, rgba(100, 100, 100, 0.2) 0%, rgba(80, 80, 80, 0.15) 100%);
-        }
-
-        .day-card h4 {
-            color: #d4a574;
+            color: #845556;
             font-size: 1.1em;
-            margin-bottom: 8px;
         }
 
-        .day-card.active h4 {
-            color: #9b59b6;
-        }
-
-        .day-card.off h4 {
-            color: #999;
-        }
-
-        .day-card p {
+        /* Footer */
+        footer {
+            background: #634647;
             color: #f5e6d3;
-            font-size: 0.9em;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
         }
 
-        .twitch-widget {
-            margin-top: 30px;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
-            border: 3px solid rgba(212, 165, 116, 0.3);
-        }
-
-        .easter-egg-coffee {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            font-size: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            z-index: 1000;
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
-            animation: pulse 2s ease-in-out infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .easter-egg-coffee:hover {
-            transform: scale(1.2) rotate(15deg);
-        }
-
-        .easter-egg-coffee.clicked {
-            animation: explode 0.6s ease-out;
-        }
-
-        @keyframes explode {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(2) rotate(180deg); opacity: 1; }
-            100% { transform: scale(0.5) rotate(360deg); opacity: 0; }
-        }
-
-        .coffee-explosion {
-            position: fixed;
-            pointer-events: none;
-            z-index: 999;
-            font-size: 30px;
-            animation: explodeCoffee 1s ease-out forwards;
-        }
-
-        @keyframes explodeCoffee {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--tx), var(--ty)) scale(0.5);
-                opacity: 0;
-            }
-        }
-
+        /* Responsive */
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2.5em;
-            }
-            
-            .section {
-                padding: 25px;
-            }
-
-            .links {
-                flex-direction: column;
-            }
-
-            .link-btn {
-                width: 100%;
-                justify-content: center;
-            }
-
-            .schedule {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .easter-egg-coffee {
-                bottom: 20px;
-                right: 20px;
-                font-size: 40px;
-            }
+            h1 { font-size: 2em; }
+            .subtitle { font-size: 1em; }
+            nav a { display: block; margin: 5px 0; }
         }
     </style>
 </head>
 <body>
-    <div class="coffee-rain" id="coffeeRain"></div>
-    <div class="header">
-        <h1>☕ Moka Café</h1>
-        <p>VTuber • Artiste • Passionné</p>
-    </div>
-
-    <div class="container">
-        <div class="section">
-            <h2>À propos</h2>
-            <p class="bio">
-                Holaaa!! Je suis Moka, un petit PNGTuber qui stream quand il peut. J'adore les jeux de rythme, 
-                les jeux Hoyoverse et dessiner. Je fais aussi les emotes de mes potes, bref, mes passions quoi! 
-                Si je suis pas en live, vous pouvez me retrouver sur la chaîne d'un ami, c'est là-bas où je fais mes bêtises!
-            </p>
-            
-            <div class="links">
-                <a href="https://www.twitch.tv/mokaa_cafe" target="_blank" class="link-btn">
-                    <span>📺</span> Twitch
-                </a>
-                <a href="https://discord.gg/S8ADhSjs" target="_blank" class="link-btn discord">
-                    <span>💬</span> Discord
-                </a>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader">
+            <div class="cup">
+                <div class="cup-handle"></div>
+                <div class="smoke one"></div>
+                <div class="smoke two"></div>
+                <div class="smoke three"></div>
             </div>
-        </div>
-
-        <div class="section">
-            <h2>📺 Twitch Live</h2>
-            <div class="twitch-widget">
-                <iframe
-                    src="https://player.twitch.tv/?channel=mokaa_cafe&parent=localhost&parent=127.0.0.1&parent=claude.ai&parent=claude.site&muted=false"
-                    height="400"
-                    width="100%"
-                    allowfullscreen>
-                </iframe>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>📅 Horaires de Stream</h2>
-            <p style="text-align: center; margin-bottom: 20px; color: #f5e6d3; font-size: 1.1em;">
-                Rendez-vous en soirée pour des streams chill ! ☕
-            </p>
-            <div class="schedule">
-                <div class="day-card active">
-                    <h4>Lundi</h4>
-                    <p>🌙 En soirée</p>
-                </div>
-                <div class="day-card active">
-                    <h4>Mardi</h4>
-                    <p>🌙 En soirée</p>
-                </div>
-                <div class="day-card active">
-                    <h4>Mercredi</h4>
-                    <p>🌙 En soirée</p>
-                </div>
-                <div class="day-card active">
-                    <h4>Jeudi</h4>
-                    <p>🌙 En soirée</p>
-                </div>
-                <div class="day-card active">
-                    <h4>Vendredi</h4>
-                    <p>🌙 En soirée</p>
-                </div>
-                <div class="day-card active">
-                    <h4>Samedi</h4>
-                    <p>🌙 En soirée</p>
-                </div>
-                <div class="day-card off">
-                    <h4>Dimanche</h4>
-                    <p>😴 Repos</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Compétences & Passions</h2>
-            <div class="skills">
-                <div class="skill-card">
-                    <h3>🎮 Streaming</h3>
-                    <p>PNGTuber sur Twitch, jeux de rythme et Hoyoverse</p>
-                </div>
-                <div class="skill-card">
-                    <h3>🎨 Art Digital</h3>
-                    <p>Création sur Ibis Paint & Clip Studio Paint</p>
-                </div>
-                <div class="skill-card">
-                    <h3>😊 Emotes</h3>
-                    <p>Création d'emotes personnalisées pour la communauté</p>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Galerie</h2>
-            <div class="gallery" id="gallery"></div>
-        </div>
-
-        <div class="commission-status">
-            <h3>📋 Commissions</h3>
-            <p>Actuellement <span class="status-badge">FERMÉES</span></p>
+            <div class="load">..........................</div>
         </div>
     </div>
 
-    <footer>
-        <p>© 2026 Moka Café • Fait avec ☕ et 💜</p>
-    </footer>
+    <!-- Cookie Banner -->
+    <div id="cookie-banner">
+        <div class="cookie-card">
+            <div class="cookie-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" height="46" width="65">
+                    <path stroke="#000" fill="#EAB789" d="M49.157 15.69L44.58.655l-12.422 1.96L21.044.654l-8.499 2.615-6.538 5.23-4.576 9.153v11.114l4.576 8.5 7.846 5.23 10.46 1.96 7.845-2.614 9.153 2.615 11.768-2.615 7.846-7.846 1.96-5.884.655-7.191-7.846-1.308-6.537-3.922z"></path>
+                    <path fill="#9C6750" d="M32.286 3.749c-6.94 3.65-11.69 11.053-11.69 19.591 0 8.137 4.313 15.242 10.724 19.052a20.513 20.513 0 01-8.723 1.937c-11.598 0-21-9.626-21-21.5 0-11.875 9.402-21.5 21-21.5 3.495 0 6.79.874 9.689 2.42z"></path>
+                    <path fill="#634647" d="M64.472 20.305a.954.954 0 00-1.172-.824 4.508 4.508 0 01-3.958-.934.953.953 0 00-1.076-.11c-.46.252-.977.383-1.502.382a3.154 3.154 0 01-2.97-2.11.954.954 0 00-.833-.634 4.54 4.54 0 01-4.205-4.507c.002-.23.022-.46.06-.687a.952.952 0 00-.213-.767 3.497 3.497 0 01-.614-3.5.953.953 0 00-.382-1.138 3.522 3.522 0 01-1.5-3.992.951.951 0 00-.762-1.227A22.611 22.611 0 0032.3 2.16 22.41 22.41 0 0022.657.001a22.654 22.654 0 109.648 43.15 22.644 22.644 0 0032.167-22.847zM22.657 43.4a20.746 20.746 0 110-41.493c2.566-.004 5.11.473 7.501 1.407a22.64 22.64 0 00.003 38.682 20.6 20.6 0 01-7.504 1.404zm19.286 0a20.746 20.746 0 112.131-41.384 5.417 5.417 0 001.918 4.635 5.346 5.346 0 00-.133 1.182A5.441 5.441 0 0046.879 11a5.804 5.804 0 00-.028.568 6.456 6.456 0 005.38 6.345 5.053 5.053 0 006.378 2.472 6.412 6.412 0 004.05 1.12 20.768 20.768 0 01-20.716 21.897z"></path>
+                </svg>
+            </div>
+            <h5 class="cookie-title">Votre vie privée est importante ☕</h5>
+            <p class="cookie-text">
+                Ce site utilise des cookies pour vous offrir la meilleure expérience possible. En continuant, vous acceptez notre utilisation des cookies.
+                <br><br>
+                Pour plus d'informations, consultez notre <a>Politique de confidentialité</a>
+            </p>
+            <div class="cookie-options">Plus d'options</div>
+            <button class="cookie-accept" onclick="acceptCookies()">Accepter</button>
+        </div>
+    </div>
 
-    <div class="easter-egg-coffee" id="easterEgg" title="Clique-moi ! ☕">☕</div>
+    <!-- Main Content -->
+    <div id="main-content">
+        <header>
+            <h1>☕ Moka Café ☕</h1>
+            <p class="subtitle">PNGTuber • Artiste • Passionnée de jeux</p>
+        </header>
+
+        <nav>
+            <a href="#about">À propos</a>
+            <a href="#passions">Passions</a>
+            <a href="#commissions">Commissions</a>
+            <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="container">
+            <section id="about" class="section">
+                <h2>🌟 À propos de Moka</h2>
+                <div class="about-content">
+                    <p>Holaaa!! Je suis Moka, un petit PNGTuber qui stream quand il peut. J'adore les jeux de rythme, les jeux Hoyoverse et dessiner. Je fais aussi les emotes de mes potes, bref, mes passions quoi!</p>
+                </div>
+            </section>
+
+            <section id="passions" class="section">
+                <h2>🎮 Mes Passions</h2>
+                <div class="about-content">
+                    <p>🎵 <strong>Jeux de rythme</strong> - J'adore me défouler sur des jeux rythmiques!</p>
+                    <p>🌟 <strong>Jeux Hoyoverse</strong> - Fan absolue de l'univers Hoyoverse</p>
+                    <p>🎨 <strong>Dessin</strong> - Je crée des emotes pour mes amis et bien plus!</p>
+                    <p>📺 <strong>Streaming</strong> - Je partage mes aventures quand je peux</p>
+                </div>
+            </section>
+
+            <section id="commissions" class="section">
+                <h2>🎨 Commissions</h2>
+                <div class="commission-status">
+                    <h3>⏸️ Actuellement Fermées</h3>
+                    <p>Les commissions ne sont pas ouvertes pour le moment. Restez à l'écoute pour les prochaines ouvertures!</p>
+                </div>
+            </section>
+
+            <section id="contact" class="section">
+                <h2>💬 Rejoins la communauté!</h2>
+                <div class="social-links">
+                    <a href="https://www.twitch.tv/mokaa_cafe" target="_blank" class="social-btn">
+                        📺 Twitch - mokaa_cafe
+                    </a>
+                    <a href="https://discord.gg/S8ADhSjs" target="_blank" class="social-btn">
+                        💬 Discord - Rejoindre
+                    </a>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p>© 2026 Moka Café - Fait avec ❤️ et ☕</p>
+            <p>Tous droits réservés</p>
+        </footer>
+    </div>
 
     <script>
-        // Easter Egg - Café explosif !
-        const easterEgg = document.getElementById('easterEgg');
-        let clickCount = 0;
+        // Loading screen
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.getElementById('loading-screen').classList.add('hidden');
+                document.getElementById('main-content').classList.add('visible');
+            }, 2000);
+        });
 
-        easterEgg.addEventListener('click', function(e) {
-            clickCount++;
-            
-            // Animation d'explosion
-            this.classList.add('clicked');
-            
-            // Créer des cafés qui explosent
-            for (let i = 0; i < 12; i++) {
-                const coffee = document.createElement('div');
-                coffee.className = 'coffee-explosion';
-                coffee.textContent = '☕';
-                coffee.style.left = e.clientX + 'px';
-                coffee.style.top = e.clientY + 'px';
-                
-                const angle = (Math.PI * 2 * i) / 12;
-                const distance = 150 + Math.random() * 100;
-                coffee.style.setProperty('--tx', Math.cos(angle) * distance + 'px');
-                coffee.style.setProperty('--ty', Math.sin(angle) * distance + 'px');
-                
-                document.body.appendChild(coffee);
-                
-                setTimeout(() => coffee.remove(), 1000);
+        // Cookie banner
+        function acceptCookies() {
+            document.getElementById('cookie-banner').classList.add('hidden');
+            localStorage.setItem('cookiesAccepted', 'true');
+        }
+
+        // Check if cookies already accepted
+        window.addEventListener('load', function() {
+            if (localStorage.getItem('cookiesAccepted') === 'true') {
+                document.getElementById('cookie-banner').classList.add('hidden');
             }
-            
-            // Messages aléatoires
-            const messages = [
-                "☕ Café bien chaud !",
-                "✨ Moka approuve !",
-                "🎮 Time to stream !",
-                "🎨 Inspiration +100 !",
-                "💜 Merci pour le café !",
-                "🌙 Parfait pour la soirée !",
-                "😊 Un café de plus, un dessin de plus !",
-                "🔥 C'est parti pour une session !",
-                "⭐ Tu as trouvé le secret !",
-                "🎵 *bruit de café qui coule*"
-            ];
-            
-            if (clickCount % 5 === 0) {
-                const message = messages[Math.floor(Math.random() * messages.length)];
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    background: linear-gradient(135deg, #d4a574 0%, #a67c52 100%);
-                    color: #1a1a2e;
-                    padding: 20px 40px;
-                    border-radius: 15px;
-                    font-size: 1.5em;
-                    font-weight: 600;
-                    z-index: 10000;
-                    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-                    animation: fadeInOut 2s ease-in-out;
-                `;
-                notification.textContent = message;
-                document.body.appendChild(notification);
-                
-                setTimeout(() => notification.remove(), 2000);
-            }
-            
-            // Remettre le café après l'animation
-            setTimeout(() => {
-                this.classList.remove('clicked');
- 
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
